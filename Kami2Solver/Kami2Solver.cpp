@@ -1,8 +1,42 @@
 // Kami2Solver.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
+#include "Kami2Solver.h"
 
 #include "pch.h"
 #include <iostream>
+
+
+void Graph_Node::Merge_Into(Graph_Node* target) {
+	for (Graph_Node* second_node : this->Adjacent_Nodes) {
+
+		Color2Nodes.at(second_node->Node_Color)->erase(this);
+		second_node->Adjacent_Nodes.erase(this);
+		second_node->Adjacent_Nodes.insert(target);
+		target->Adjacent_Nodes.insert(second_node);
+	}
+	
+}
+
+void Graph_Node::Node_Recolor(int new_color) {
+	//if this node is the last one of the same color
+	if (Color2Nodes.at(this->Node_Color)->size() == 1) {
+		Color2Nodes.erase(this->Node_Color);
+	}
+	this->Node_Color = new_color;
+	for (Graph_Node* node : this->Adjacent_Nodes) {
+		
+		if (node->Node_Color == new_color) {
+			node->Merge_Into(this);
+		}
+	}
+}
+
+int Graph_Node::Try_Reduce() {
+	for (Graph_Node* adj_node : this->Adjacent_Nodes) {
+
+	}
+}
+
 
 int main()
 {
